@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Duck Shoot</title>
+	<style type="text/css">
+		body{
+			font-family: Arial;
+			margin: 0;
+			padding: 0;
+		}
+		.shtoriL {
+			width: 250px;
+			height: 945px;
+			background-image: url(1s.png);
+			background-size: 100%;
+		}
+		.shtoriR {
+			width: 250px;
+			height: 945px;
+			float: right;
+			margin-top: -945px;
+			background-image: url(2s.png);
+			background-size: 100%;
+		}
+		.duck {
+			width: 100px;
+			height: 100px;
+			background-size: 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			z-index: 2;
+			
+		}
+		.playBtn {
+			width: 100px;
+			color: white;
+			background-color: red;
+			margin-left: auto;
+			position: absolute;
+			left: 47%;
+			top: 50px;
+			text-align: center;
+			padding: 20px 40px;
+			border-radius: 10px;
+			border: 3px solid #f0f0f0;
+			transition: 0.5s;
+			box-shadow: 13px 10px 21px 1px rgba(255,74,74,0.27);
+		}
+		.playBtn:hover {
+			color: red;
+			background-color: white;
+			border: 3px solid white;
+		}
+		.wave1 {
+			width: 99%;
+			height: 304px;
+			background-image: url(wave1.png);
+			background-size: 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			top:650px;
+			z-index: -1000;
+		}
+		.wave2 {
+			width: 99%;
+			height: 234px;
+			background-image: url(wave2.png);
+			background-size: 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			top:450px;
+			z-index: -2000;
+		}
+		.wave3 {
+			width: 99%;
+			height: 234px;
+			background-image: url(wave3.png);
+			background-size: 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			top:250px;
+			z-index: -3000;
+		}
+		.scoreMom{
+			position: absolute; left: 47%; top: 50px; padding: 20px 30px; border: 2px solid black; border-radius: 10px; display: none;
+		}
+		.scoreText{
+			color: #705CFF;
+		}
+	</style>
+</head>
+<body>
+	<div class="wave1"></div>
+	<div class="wave2"></div>
+	<div class="wave3"></div>
+	<div class="shtoriL"></div>
+	<div class="shtoriR"></div>
+	<div class="playBtn">
+		<span></span>
+		Начать игру
+	</div>
+	<h1 class="scoreMom">Очки:<span class="scoreText">0</span> из 30</h1>
+	<script type="text/javascript">
+		let btn = document.querySelector(".playBtn")
+		let scoreText = document.querySelector(".scoreText")
+		let scoreMom = document.querySelector(".scoreMom")
+		let score = 0;
+		let createDucks; //переменная для чистки интервала не видна за пределами клика
+
+		let topPositions = [200,400,600]; //обозначить проблему/ слишком густо появляются
+		
+		//let duckVariants = ['1.png','2.png']
+		
+		let random = function(arg){
+            let rand = Math.random() * arg;
+            let round = Math.round(rand);
+            return round;
+        }      
+
+    	let createDuck = function(){
+		   let duck = document.createElement('div');
+		   document.body.appendChild(duck);
+	       duck.classList.add("duck"); //новая тема
+
+	       //duck.style.backgroundImage = 'url('+duckVariants[random(2)]+')'
+		   duck.style.left = random(1400) + "px";
+           duck.style.top = topPositions[random(2)]  + "px";  //новая тема
+
+           if(random(2)==0){  
+           		duck.style.backgroundImage = 'url(2.png)'
+           		duck.name = 'good'; 
+           }else if(random(2)==1){
+			duck.style.backgroundImage = 'url(1.png)'
+           		duck.name = 'norm'; 
+		   } 
+		   else if(random(2)==2){ //новая тема
+           		duck.style.backgroundImage = 'url(3.png)'
+           		duck.name = 'bad'; //новая тема
+           }
+
+		   duck.onclick = function(){       		
+
+	       		if(duck.name == 'good') { //мб а может и нет
+	       			score = score + 2
+	       			scoreText.innerHTML = score
+	       		} else if(duck.name == "bad"){
+					score = score - 2
+	       			scoreText.innerHTML = score
+				}
+				else {
+	       			score = score + 1
+	       			scoreText.innerHTML = score
+	       		}
+	       		duck.style.display = "none";
+	       	}
+    	}
+
+    	let itog = function(){
+    		clearInterval(createDucks);
+			if(score >=30){
+				alert("Победа")
+			}else{
+				alert("Проигрыш")
+			}
+			
+    	}
+
+
+
+    	btn.onclick = function(){
+        	createDucks = setInterval(createDuck,250);
+			
+			setTimeout(itog,9000)
+			btn.style.display = "none";
+			scoreMom.style.display = "block"
+        }
+	</script>
+</body>
+</html>
